@@ -35,5 +35,5 @@ To run your project, navigate to the directory and run one of the following yarn
 ```
 
 ### Django
-1. Instalar django-admin con `python -m pip install Django"
+1. Instalar django-admin con `python -m pip install Django`
 2. Para correr el backend, ir a carpeta de api y correr `python manage.py runserver`
