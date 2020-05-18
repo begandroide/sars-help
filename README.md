@@ -19,7 +19,7 @@ Se define el siguiente stack de tecnologías a utilizar:
 - Django > 3.x.x
 - npm
 - expo-cli
-- node
+- node >
 
 ## Anexos
 
