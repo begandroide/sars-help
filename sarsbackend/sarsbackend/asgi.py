@@ -1,5 +1,5 @@
 """
-ASGI config for sarshelpapi project.
+ASGI config for sarsbackend project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sarshelpapi.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sarsbackend.settings')
 
 application = get_asgi_application()
