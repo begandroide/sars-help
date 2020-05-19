@@ -32,19 +32,30 @@ export default class LoginScreen extends React.Component {
                     dni: Yup.string()              
                       .required('Rut es requerido'),
                     email: Yup.string()
-                      .email('Email inválido')
                       .required('Requerido'),
                     password: Yup.string()
                       .required('Required')
                       .min(4, 'Al menos debe tener 4 caracteres')
                   })}
                   onSubmit={(values, formikActions) => {
-                    setTimeout(() => {
-                      Alert.alert(JSON.stringify(values));
-                      // Important: Make sure to setSubmitting to false so our loading indicator
-                      // goes away.
+                    console.log(values);
+                    fetch('http://localhost:8000/api/auth/login/', {
+                      method: 'post',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        username: values.email,
+                        password: values.password
+                      })
+                    }).then((value) => {
+                      console.log(value);
                       formikActions.setSubmitting(false);
-                    }, 500);
+                    }).catch((err) => {
+                      formikActions.setSubmitting(false);
+                      props.isSubmitting = false;
+                      console.log("un error hermano");
+                    });
                   }}>
                   {props => ( console.log(props) ||
                     <View>
@@ -72,7 +83,6 @@ export default class LoginScreen extends React.Component {
                           label="Correo o usuario"
                           variant="outlined" 
                           id="username"
-                          type="email"
                           error={props.touched.email && props.errors.email ? true : false}
                           placeholder="Email..."
                           ref={el => this.emailInput = el}
