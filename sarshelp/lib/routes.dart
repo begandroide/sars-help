@@ -10,7 +10,7 @@ class Routes {
 
   Routes () {
     runApp(new MaterialApp(
-      title: 'Flutter Template',
+      title: 'SarsHelp',
       routes: routes,
       home: new MyApp(),
       debugShowCheckedModeBanner: false,
@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return new  MaterialApp(
-      title: 'Flutter Template',
+      title: 'SarsHelp',
       home: new RootPage(auth: new Auth()),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

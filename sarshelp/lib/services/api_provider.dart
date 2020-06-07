@@ -3,9 +3,11 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+const host = '127.0.0.1:8000';
+
 class ApiProvider {
   fetchPosts() async {
-	final response = await http.get("www.seba.woz.cl/codeigniter/index.php/productos/edit/1");
+	final response = await http.get(host + '/api/users/getAll/');
     ItemModel itemModel = ItemModel.fromJson(json.decode(response.body));
     return itemModel;
   }
