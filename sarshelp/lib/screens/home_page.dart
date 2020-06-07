@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sarshelp/screens/requests_page.dart';
 import 'package:sarshelp/screens/user_page.dart';
-import 'package:sarshelp/services/api_provider.dart';
 import 'package:sarshelp/services/authentication.dart';
-
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.auth, this.userId, this.onSignedOut})
@@ -17,27 +16,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-    List<ItemModel> _todoList;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   int _currentIndex = 0;
 
-  Text appBarTitleText = new Text("AceiteMobil");
+  Text appBarTitleText = new Text("Sars Help");
   Widget _body = null;
 
   @override
   void initState() {
     super.initState();
-    _todoList = new List();
-    // for(int i = 1; i < 6; i++)
-    // {
-    //   getItem(i).then((ItemModel res){
-    //     print("Producto id -> " + i.toString());
-    //     print( res.idProducto + " / " + res.plu + " / " + res.descripcion + " / " + res.costoReal);
-    //     setState(() {
-    //       _todoList.add(res);
-    //     });
-    //   });
-    // }
   }
 
  _signOut() async {
@@ -59,22 +46,18 @@ onTabTapped(int index) {
       _currentIndex = index;
        break;
      case 1:
-      appBarTitleText = Text('Tienda'); 
+      appBarTitleText = Text('Solicitudes'); 
        _currentIndex = index;
-      //  _body = showTodoList(_todoList);
+       _body = buildRequestsPage(context);
        break;
     case 2:
-      appBarTitleText = Text('Facturas');
+      appBarTitleText = Text('Ayuda');
        _currentIndex = index;
        break;
     case 3:
-      appBarTitleText = Text('Carrito');
-       _currentIndex = index;
-       break;
-    case 4:
       appBarTitleText = Text('Perfil');
-      _body = showProfile();
-      _currentIndex = index;
+      _body = showProfile(context);
+       _currentIndex = index;
        break;
    }});
 }
@@ -89,6 +72,29 @@ onTabTapped(int index) {
 @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: new AppBar(
+        title: new Center(child:Text('Sars Help')),
+        actions: [
+          PopupMenuButton<String>(
+            
+  				onSelected: this._select,
+          // onSelected: home_page._select,
+          itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+            const PopupMenuItem<String>(
+            value: 'Cerrar Sesion',
+            child: Text('Cerrar Sesion')
+            ),
+            const PopupMenuItem<String>(
+            value: 'Right here',
+            child: Text('Ayuda')
+            ),
+            const PopupMenuItem<String>(
+            value: 'Hooray!',
+            child: Text('Donar!')
+            ),],
+        ),
+        ]
+      ),
       body: _body,
       bottomNavigationBar:  BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -99,14 +105,11 @@ onTabTapped(int index) {
                 icon: Icon(Icons.home),
                 title: Text('Inicio') ),
               new BottomNavigationBarItem(
-                icon: Icon(Icons.store_mall_directory),
-                title: Text('Tienda') ),
+                icon: Icon(Icons.book),
+                title: Text('Solicitudes') ),
               new BottomNavigationBarItem(
-                icon: Icon(Icons.attach_money),
-                title: Text('Facturas') ),
-              new BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart),
-                title: Text('Carrito') ),
+                icon: Icon(Icons.help_outline),
+                title: Text('Ayuda') ),
               new BottomNavigationBarItem(
                 icon: Icon(Icons.person),
                 title: Text('Perfil') ),
