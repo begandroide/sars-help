@@ -1,26 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sarshelp/screens/requests_page.dart';
 import 'package:sarshelp/screens/user_page.dart';
-import 'package:sarshelp/services/authentication.dart';
+import 'package:sarshelp/widgets/common.dart';
+
+import 'home_content.dart';
+
+final auth = FirebaseAuth.instance;
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.auth, this.userId, this.onSignedOut})
-      : super(key: key);
-
-  final BaseAuth auth;
-  final VoidCallback onSignedOut;
-  final String userId;
-
   @override
   State<StatefulWidget> createState() => new _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
+  String _userId = "";
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   int _currentIndex = 0;
 
   Text appBarTitleText = new Text("Sars Help");
-  Widget _body = null;
+  Widget _body = new HomeContent();
 
   @override
   void initState() {
@@ -29,8 +29,12 @@ class _HomePageState extends State<HomePage> {
 
  _signOut() async {
     try {
-      await widget.auth.signOut();
-      widget.onSignedOut();
+      await auth.signOut();
+      
+    setState(() {
+      authStatus = AuthStatus.NOT_LOGGED_IN;
+      _userId = "";
+    });
     } catch (e) {
       print(e);
     }
@@ -42,13 +46,13 @@ onTabTapped(int index) {
    switch (index) {
      case 0:
       appBarTitleText = Text('Home');
-      _body = null;
+      _body = new HomeContent();
       _currentIndex = index;
        break;
      case 1:
       appBarTitleText = Text('Solicitudes'); 
        _currentIndex = index;
-       _body = buildRequestsPage(context);
+       _body = new RequestsPage();
        break;
     case 2:
       appBarTitleText = Text('Ayuda');
@@ -56,7 +60,7 @@ onTabTapped(int index) {
        break;
     case 3:
       appBarTitleText = Text('Perfil');
-      _body = showProfile(context);
+      _body = new UserPage();
        _currentIndex = index;
        break;
    }});
@@ -76,7 +80,6 @@ onTabTapped(int index) {
         title: new Center(child:Text('Sars Help')),
         actions: [
           PopupMenuButton<String>(
-            
   				onSelected: this._select,
           // onSelected: home_page._select,
           itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
