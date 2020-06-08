@@ -5,6 +5,15 @@ import 'package:sarshelp/widgets/common.dart';
 
 final dbRef = Firestore.instance.collection("Users");
 
+
+class UserPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return showProfile(context);
+  }
+
+}
+
 Widget showProfile(BuildContext context) {
   return FutureBuilder(
     future: _getuid(),
