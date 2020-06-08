@@ -13,6 +13,21 @@ class HomeContent extends StatelessWidget {
 Widget showHomeContent(BuildContext context) {
   return Center(
       child: Column(children: <Widget>[
+        Container(
+          alignment: Alignment.centerLeft,
+          height: 50.0,
+          margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0),
+          child:RichText(
+            text: TextSpan(
+              text:'Bienvenid@ ',
+              style: DefaultTextStyle.of(context).style,
+              children: <TextSpan>[
+                TextSpan(text: 'Benjamín', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: ' !')
+              ]
+            )
+          ),
+        ),
         Card(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -20,7 +35,13 @@ Widget showHomeContent(BuildContext context) {
               const ListTile(
                 leading: Icon(Icons.people),
                 contentPadding: EdgeInsets.only(left: 15.0,right: 40.0, top:10.0),
-                title: Text('Voluntarios'),
+                title: Padding(
+                  padding: EdgeInsets.only(bottom:5),
+                  child: 
+                    Text(
+                      'Voluntarios',
+                      ),
+                  ),
                 subtitle: Text('Los voluntarios asisten a los que necesitan de ayuda.'),
               ),
               ButtonBar(
@@ -30,7 +51,7 @@ Widget showHomeContent(BuildContext context) {
                     onPressed: () {/* ... */},
                   ),
                   FlatButton(
-                    child: const Text('MÁS'),
+                    child: const Text('MÁS INFO'),
                     onPressed: () {/* ... */},
                   ),
                 ],
@@ -39,7 +60,7 @@ Widget showHomeContent(BuildContext context) {
           ),
         ),
         Card(
-          
+
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

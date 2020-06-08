@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sarshelp/screens/create_request.dart';
 import 'package:sarshelp/widgets/common.dart';
 
 
@@ -11,7 +12,25 @@ final dbRef = Firestore.instance.collection("HelpRequests");
 class RequestsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return buildRequestsPage(context);
+    return 
+    Scaffold(
+      body: buildRequestsPage(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your onPressed code here!
+          onPressed(context);
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Theme.of(context).accentColor,
+      ),
+    );
+  }
+
+  onPressed (BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CreateRequestPage()),
+    );
   }
 }
 

@@ -15,7 +15,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
-  String _userId = "";
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   int _currentIndex = 0;
 
@@ -33,7 +32,6 @@ class _HomePageState extends State<HomePage> {
       
     setState(() {
       authStatus = AuthStatus.NOT_LOGGED_IN;
-      _userId = "";
     });
     } catch (e) {
       print(e);
@@ -43,6 +41,7 @@ class _HomePageState extends State<HomePage> {
 
 onTabTapped(int index) {
    setState(() {
+   if(index == _currentIndex) return;
    switch (index) {
      case 0:
       appBarTitleText = Text('Home');
