@@ -7,6 +7,14 @@ import 'package:sarshelp/widgets/common.dart';
 
 final dbRef = Firestore.instance.collection("HelpRequests");
 
+
+class RequestsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return buildRequestsPage(context);
+  }
+}
+
 Widget buildRequestsPage(BuildContext context) {
   return FutureBuilder(
     future: FirebaseAuth.instance.currentUser(),
