@@ -14,10 +14,10 @@ class UserPage extends StatelessWidget {
 
   Completer<GoogleMapController> _controller = Completer();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{}; // CLASS MEMBER, MAP OF MARKS
-
+  int count = 0;
   void _add({GeoPoint geoPoint}) {
-    final MarkerId markerId = MarkerId('markerIdVal');
-
+    final MarkerId markerId = MarkerId('marker$count');
+    count++;
     // creating a new MARKER
     final Marker marker = Marker(
       markerId: markerId,
@@ -37,11 +37,6 @@ class UserPage extends StatelessWidget {
       );
   } 
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
   @override
   Widget build(BuildContext context) {
   return FutureBuilder(
@@ -53,8 +48,7 @@ class UserPage extends StatelessWidget {
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot){
             if(snapshot.hasData){
               _add(geoPoint: snapshot.data['address'] as GeoPoint);
-              return Expanded(
-                child:  Stack(
+              return Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
                           Column(
@@ -111,8 +105,6 @@ class UserPage extends StatelessWidget {
                             ]
                           )
                     ]
-                  )
-                  // Profile image
               );
             } else {
               return buildWaitingScreen();
