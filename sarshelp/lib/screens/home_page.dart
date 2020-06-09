@@ -54,10 +54,6 @@ onTabTapped(int index) {
        _body = new RequestsPage();
        break;
     case 2:
-      appBarTitleText = Text('Ayuda');
-       _currentIndex = index;
-       break;
-    case 3:
       appBarTitleText = Text('Perfil');
       _body = new UserPage();
        _currentIndex = index;
@@ -109,9 +105,6 @@ onTabTapped(int index) {
               new BottomNavigationBarItem(
                 icon: Icon(Icons.book),
                 title: Text('Solicitudes') ),
-              new BottomNavigationBarItem(
-                icon: Icon(Icons.help_outline),
-                title: Text('Ayuda') ),
               new BottomNavigationBarItem(
                 icon: Icon(Icons.person),
                 title: Text('Perfil') ),
