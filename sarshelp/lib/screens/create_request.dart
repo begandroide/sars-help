@@ -7,10 +7,12 @@ import 'package:flutter/services.dart';
 
 class CreateRequestPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Nueva solicitud'),
       ),
@@ -48,9 +50,8 @@ class CreateRequestPage extends StatelessWidget {
               RaisedButton(
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
-                      Scaffold
-                          .of(context)
-                          .showSnackBar(SnackBar(content: Text('Processing Data')));
+                      final snackBar = SnackBar(content: Text('Procesando datos...'));
+                      _scaffoldKey.currentState.showSnackBar(snackBar);
                     }
                   },
                   child: Text('Enviar'),
