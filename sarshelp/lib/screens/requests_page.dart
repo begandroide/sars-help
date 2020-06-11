@@ -4,10 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sarshelp/screens/create_request.dart';
 import 'package:sarshelp/widgets/common.dart';
-
+import 'package:age/age.dart';
 
 final dbRef = Firestore.instance.collection("HelpRequests");
-
 
 class RequestsPage extends StatefulWidget {
   @override
@@ -64,7 +63,10 @@ class _RequestsPageState extends State<RequestsPage> {
                             child: Container(
                               child: Column(children: <Widget>[
                                 ListTile(
-                                  leading: _getLeadingListTile(document),
+                                  leading: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[_getLeadingListTile(document)]
+                                  ),
                                   title: new Text(document['shortName'].toString()),
                                   subtitle: _getSubtitleListTile(document),
                                   trailing: new Icon(Icons.more_vert),
@@ -93,8 +95,8 @@ class _RequestsPageState extends State<RequestsPage> {
 
   _getLeadingListTile(DocumentSnapshot document) {
     if(document['isClosed']) {
-      return new Icon(Icons.check);
-    } return new Icon(Icons.error); 
+      return new Icon(Icons.check, color: Colors.green);
+    } return new Icon(Icons.error, color: Colors.redAccent); 
   }
 
   _getSubtitleListTile(DocumentSnapshot document) {
@@ -103,13 +105,35 @@ class _RequestsPageState extends State<RequestsPage> {
       padding: EdgeInsets.only(top: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Text(DateTime.fromMillisecondsSinceEpoch(document['datetime'].millisecondsSinceEpoch).toString()),
-          Chip(
-            label: Text(document['grade'].toString(), style: TextStyle(color: Colors.white)),
-            backgroundColor: Colors.pink,
-          ),
+          Text( 'Registrado hace ' +  Age.dateDifference( fromDate: DateTime.fromMillisecondsSinceEpoch(document['datetime'].millisecondsSinceEpoch), toDate: new DateTime.now() ).days.toString() + ' días'),
+          new Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Transform(
+                transform: new Matrix4.identity()..scale(0.9),
+                child: new Chip(
+                  label: new Text(
+                    document['isClosed'] ? 'Resuelta' : "Abierta",
+                    overflow: TextOverflow.ellipsis,
+                    style: new TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: document['isClosed'] ? Colors.green : Colors.redAccent,
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  text:'Nivel: ',
+                  style: TextStyle(color: Colors.black, fontSize: 12.0),
+                  children: <TextSpan>[
+                    TextSpan(text: document['grade'].toString(), style: TextStyle(fontWeight: FontWeight.bold)),
+                  ] 
+                ),
+              ),
+            ]
+          )
       ]
     )
     );
