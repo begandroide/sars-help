@@ -55,26 +55,28 @@ class _UserPageState extends State<UserPage> {
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot){
             if(snapshot.hasData){
               _add(geoPoint: snapshot.data['address'] as GeoPoint);
-              return SizedBox(
-                 height: 700,
-                 child: 
-                  Card(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(top:10,left: 20.0,right: 20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            _getProfileImage(snapshot),
-                            _getMap(snapshot)
-                          ],	
-                        ) ,
-                      ),
-                    ]
-                )
-                )
+              return new SingleChildScrollView(
+                child: SizedBox(
+                  height: 625,
+                  child: 
+                    Card(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(top:10,left: 20.0,right: 20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              _getProfileImage(snapshot),
+                              _getMap(snapshot)
+                            ],	
+                          ) ,
+                        ),
+                      ]
+                  )
+                  )
+              )
               );
             } else {
               return buildWaitingScreen();
