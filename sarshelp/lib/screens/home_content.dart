@@ -17,14 +17,17 @@ class _HomeContentState extends State<HomeContent> {
   }
 
   Widget showHomeContent() {
-    return Center(
+    return new SingleChildScrollView(
+      child:
+      Center(
         child: Column(children: <Widget>[
           _getWelcomeHeader(),
           _getVoluntiersCard(),
           _getGeneralStatistics()
     
         ],) 
-      );
+      )
+    );
   }
 
   Widget _getWelcomeHeader() {
