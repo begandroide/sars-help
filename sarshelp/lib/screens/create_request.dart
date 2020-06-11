@@ -1,9 +1,13 @@
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocation/geolocation.dart';
+import 'package:location_permissions/location_permissions.dart';
 
 class CreateRequestPage extends StatefulWidget {
   @override
@@ -11,6 +15,24 @@ class CreateRequestPage extends StatefulWidget {
 }
 
 class _CreateRequestPageState extends State<CreateRequestPage> {
+  // best option for most cases
+  static PermissionStatus permission;
+  StreamSubscription<LocationResult> subscription = Geolocation.currentLocation(accuracy: LocationAccuracy.best).listen((result) async {
+    var perm = await LocationPermissions().checkPermissionStatus(level: LocationPermissionLevel.locationWhenInUse);
+    switch (perm) {
+      case PermissionStatus.denied:
+        permission = await LocationPermissions().requestPermissions(permissionLevel: LocationPermissionLevel.locationWhenInUse);
+        if(result.isSuccessful) {
+          double latitude = result.location.latitude;
+          // todo with result
+        } 
+        break;
+      case PermissionStatus.granted:
+          double latitude = result.location.latitude;
+          break;
+      default:
+    }
+  });
   final _formKey = GlobalKey<FormState>();
   String _grade;
   String _shortName;

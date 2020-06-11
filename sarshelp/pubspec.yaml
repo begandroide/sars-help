@@ -35,6 +35,8 @@ dependencies:
   google_maps_flutter: ^0.5.28+1
   localstorage: ^3.0.0
   age: ^0.0.1
+  geolocation: ^1.1.2
+  location_permissions: ^3.0.0+1
 
 dev_dependencies:
   flutter_test:
