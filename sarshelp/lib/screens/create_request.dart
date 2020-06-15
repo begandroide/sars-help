@@ -91,7 +91,36 @@ class _CreateRequestPageState extends State<CreateRequestPage> {
                                   ),
                                   IconButton(
                                     icon: Icon(Icons.help),
-                                    onPressed: () => {},
+                                    onPressed: () => {
+                                      showDialog(
+                                        context: context,
+                                        builder: (_) => AlertDialog(
+                                            title: Text('¿Qué es el Grado?'),
+                                            content: SingleChildScrollView(
+                                              child: ListBody(
+                                                children: <Widget>[
+                                                  Text('Es una puntuación de la estimación de la gravedad o urgencia de una petición.'),
+                                                  Container(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Row(children: <Widget>[
+                                                      Text('● Nivel 1:')
+                                                    ],
+                                                    )
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                child: Text('Approve'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                        )
+                                    )
+                                    },
                                     color: Colors.blueGrey
                                   ),
                                 ],
