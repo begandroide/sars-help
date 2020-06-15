@@ -49,7 +49,7 @@ class _RequestsPageState extends State<RequestsPage> {
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
               if(snapshot.hasData){
               return StreamBuilder<QuerySnapshot>(
-                stream: dbRef.document(user.data.uid).collection('userRequests').snapshots(),
+                stream: dbRef.document(user.data.uid).collection('userRequests').orderBy('datetime', descending: true).snapshots(),
                 builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError)
                     return new Text('Error: ${snapshot.error}');
@@ -70,7 +70,23 @@ class _RequestsPageState extends State<RequestsPage> {
                                   title: new Text(document['shortName'].toString()),
                                   subtitle: _getSubtitleListTile(document),
                                   trailing:  PopupMenuButton<String>(
-                                    // onSelected: this._select,
+                                    onSelected: (value) => {
+                                      if(value == 'resolved'){
+                                        FirebaseAuth.instance.currentUser().then((value) => {
+                                          Firestore.instance.collection('HelpRequests/' + value.uid + '/userRequests').document(document.documentID).updateData({
+                                            'datetime': document['datetime'],
+                                            'description': document['description'],
+                                            'grade': document['grade'],
+                                            'shortName': document['shortName'],
+                                            'isClosed': true,
+                                            'endDate': DateTime.now()
+                                          }).whenComplete(() => 
+                                          {
+                                          }
+                                          )
+                                      })
+                                    }
+                                    },
                                     itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
                                       const PopupMenuItem<String>(
                                       value: 'resolved',
