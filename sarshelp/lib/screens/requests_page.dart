@@ -69,7 +69,14 @@ class _RequestsPageState extends State<RequestsPage> {
                                   ),
                                   title: new Text(document['shortName'].toString()),
                                   subtitle: _getSubtitleListTile(document),
-                                  trailing: new Icon(Icons.more_vert),
+                                  trailing:  PopupMenuButton<String>(
+                                    // onSelected: this._select,
+                                    itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+                                      const PopupMenuItem<String>(
+                                      value: 'resolved',
+                                      child: Text('Marcar como Resuelta')
+                                      ),],
+                                  ),
                                   isThreeLine: true,
                                 ),
                                 Row(children: <Widget>[

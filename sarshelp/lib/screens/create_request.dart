@@ -169,7 +169,7 @@ class _CreateRequestPageState extends State<CreateRequestPage> {
                           Firestore.instance.collection('HelpRequests/' + value.uid + '/userRequests').add({
                             'datetime': DateTime.now(),
                             'description': _description,
-                            'grade': _grade,
+                            'grade': _grade.floor(),
                             'shortName': _shortName,
                             'isClosed': false
                           }).whenComplete(() => 
