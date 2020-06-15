@@ -34,7 +34,7 @@ class _CreateRequestPageState extends State<CreateRequestPage> {
     }
   });
   final _formKey = GlobalKey<FormState>();
-  String _grade;
+  double _grade = 1.0;
   String _shortName;
   String _description;
 
@@ -55,24 +55,48 @@ class _CreateRequestPageState extends State<CreateRequestPage> {
           child: Card(
             child: Column(
               children:<Widget>[
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  maxLength: 1,
-                  onSaved: (value) => _grade = value,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'El grado es un campo requerido';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Grado *'
-                  ),
-                  inputFormatters: <TextInputFormatter>[
-                      WhitelistingTextInputFormatter.digitsOnly
-                  ], // Only numbers can be entered
-                ),
+                FormField(
+                  builder: (FormFieldState state) {
+                    return
+                      Container(
+                        decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(5)),
+                        margin: EdgeInsets.only(top:20.0, bottom: 20.0),
+                        child:
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(left: 15, top: 10),
+                                child: Text('Grado *', style: TextStyle(fontWeight: FontWeight.w400),),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: MediaQuery.of(context).size.width - MediaQuery.of(context).size.width/6,
+                                    child: 
+                                      Slider(
+                                        min: 1.0,
+                                        max: 5.0,
+                                        divisions: 4,
+                                        label: _grade.round().toString(),
+                                        activeColor: Colors.redAccent,
+                                        value: _grade,
+                                        onChanged: (value) => {
+                                          setState(() => {
+                                            _grade = value,
+                                          })
+                                        }
+                                      ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.help),
+                                    onPressed: () => {},
+                                    color: Colors.blueGrey
+                                  ),
+                                ],
+                              ),]));
+                  }),
                 TextFormField(
                   maxLength: 40,
                   onSaved: (value) => _shortName = value,
@@ -135,7 +159,7 @@ class _CreateRequestPageState extends State<CreateRequestPage> {
               ]
             )
           ) 
-        ),
+        )
       )
     );
   }
