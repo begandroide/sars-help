@@ -1,24 +1,40 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sarshelp/services/authentication.dart';
 
 class SingUpPage extends StatefulWidget {
+  SingUpPage({Key key, this.auth}) : super(key: key);
+
+  final BaseAuth auth;
 
   @override
   State<StatefulWidget> createState() => new _SignUpPageState();
 }
+class FormSignup {
+  String email;
+  String password;
+  String names;
+  String surnames;
+  DateTime birthdate;
+  GeoPoint address;
+  
+  Form() {
+    this.email = '';
+    this.password = '';
+    this.names = '';
+  }
+}
 
 class _SignUpPageState extends State<SingUpPage> {
   final _formKey = new GlobalKey<FormState>();
-  String _email;
-  String _password;
-  String _errorMessage;
+  FormSignup userFormInputs = new FormSignup(); 
   
+  String _errorMessage;
   int currentStep = 0;
   bool complete = false;
 
   bool _isLoading;
   List<Step> steps = [];
-    
   
   @override
   Widget build(BuildContext context) {
@@ -92,7 +108,7 @@ class _SignUpPageState extends State<SingUpPage> {
               color: Colors.grey,
             )),
         validator: (value) => value.isEmpty ? 'Debe ingresar una contraseña' : null,
-        onSaved: (value) => _password = value,
+        onSaved: (value) => userFormInputs.password = value,
       ),
     );
   }
@@ -111,7 +127,7 @@ class _SignUpPageState extends State<SingUpPage> {
               color: Colors.grey,
             )),
         validator: (value) => value.isEmpty ? 'Correo no puede ser vacío' : null,
-        onSaved: (value) => _email = value,
+        onSaved: (value) => userFormInputs.email = value,
       ),
     );
   }
