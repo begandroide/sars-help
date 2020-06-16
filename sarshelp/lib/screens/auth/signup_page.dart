@@ -35,13 +35,28 @@ class _SignUpPageState extends State<SingUpPage> {
 
   bool _isLoading;
   List<Step> steps = [];
-  
+  DateTime selectedDate = DateTime.now();
+
+  Future<Null> _selectDate() async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1940, 1),
+        lastDate: DateTime(2030),
+        cancelText: "CANCELAR",
+        
+      );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
   @override
   Widget build(BuildContext context) {
     steps = getSteps();
     return new Scaffold(
         appBar: AppBar(
-          title: Text('Create an account'),
+          title: Text('Crear cuenta'),
         ),
         body: Column(children: <Widget>[
           Expanded(
@@ -68,13 +83,6 @@ class _SignUpPageState extends State<SingUpPage> {
             ),
           )
         ]));
-  }
-
-  Widget _showCircularProgress(){
-    if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
-    } return Container(height: 0.0, width: 0.0,);
-
   }
 
   next() {
@@ -159,6 +167,10 @@ class _SignUpPageState extends State<SingUpPage> {
             decoration: InputDecoration(labelText: 'Apellidos'),
           ),
           TextFormField(
+            onTap: () => {
+              _selectDate()
+            },
+            initialValue: "${selectedDate.toLocal()}".split(' ')[0],
             decoration: InputDecoration(labelText: 'Fecha nacimiento'),
           ),
         ],
