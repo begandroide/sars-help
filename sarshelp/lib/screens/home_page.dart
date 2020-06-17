@@ -74,6 +74,7 @@ onTabTapped(int index) {
     return new Scaffold(
       appBar: new AppBar(
         title: new Center(child:Text('Sars Help')),
+        automaticallyImplyLeading: false,
         actions: [
           PopupMenuButton<String>(
   				onSelected: this._select,

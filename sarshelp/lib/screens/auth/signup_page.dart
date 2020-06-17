@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sarshelp/services/authentication.dart';
+import 'package:search_map_place/search_map_place.dart';
 
 class SingUpPage extends StatefulWidget {
   SingUpPage({Key key, this.auth}) : super(key: key);
@@ -32,7 +34,7 @@ class _SignUpPageState extends State<SingUpPage> {
   String _errorMessage;
   int currentStep = 0;
   bool complete = false;
-
+  bool _isIos;
   bool _isLoading;
   List<Step> steps = [];
   DateTime selectedDate;
@@ -55,11 +57,15 @@ class _SignUpPageState extends State<SingUpPage> {
   @override
   Widget build(BuildContext context) {
     steps = getSteps();
+    _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return new Scaffold(
         appBar: AppBar(
           title: Text('Crear cuenta'),
         ),
-        body: Column(children: <Widget>[
+        body:new Form(
+          key: _formKey,
+          child:
+         Column(children: <Widget>[
           new SizedBox(
           height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height/5,
           child: Stepper(
@@ -85,7 +91,7 @@ class _SignUpPageState extends State<SingUpPage> {
             ),
           ),
           _showPrimaryButton()
-        ]));
+        ])));
   }
 
   next() {
@@ -206,7 +212,7 @@ Widget _getDatePickerEnabled() {
               validator: (value) => value.isEmpty ? 'El apellido es requerido' : null,
               onSaved: (value) => userFormInputs.surnames = value,
             ),
-            _getDatePickerEnabled()
+            _getDatePickerEnabled(),
           ],
         ),
       ),
@@ -216,8 +222,6 @@ Widget _getDatePickerEnabled() {
         subtitle: const Text("Error!"),
         content: Column(
           children: <Widget>[
-            // ,SearchMapPlaceWidget(
-            // )
           ],
         ),
       ),
@@ -236,7 +240,54 @@ Widget _getDatePickerEnabled() {
           ),
         );
   }
-  _validateAndSubmit(){
 
+  
+  // Perform login or signup
+  _validateAndSubmit() async {
+    setState(() {
+      _errorMessage = "";
+      _isLoading = true;
+    });
+    if (_validateAndSave()) {
+      String userId = "";
+      try {
+        userId = await widget.auth.signUp(userFormInputs.email, userFormInputs.password);
+        print('Signed up user: $userId');
+        Firestore.instance.collection('Users').document(userId).setData({
+          'birthdate': userFormInputs.birthdate,
+          'name': userFormInputs.names,
+          'lastName': userFormInputs.surnames, 
+          'address': GeoPoint(-33.04, -71.59)
+        });
+        setState(() {
+          _isLoading = false;
+        });
+
+        if (userId.length > 0 && userId != null) {
+          // mostrar pantalla de registro de datos de usuario y luego mostrar onSignedId          
+          // widget.onSignedIn();
+          Navigator.pushNamedAndRemoveUntil(context, '/Home', (_)=>false);
+        }
+
+      } catch (e) {
+        print('Error: $e');
+        setState(() {
+          _isLoading = false;
+          if (_isIos) {
+            _errorMessage = e.details;
+          } else
+            _errorMessage = e.message;
+        });
+      }
+    }
+  }
+  // Check if form is valid before perform login or signup
+  bool _validateAndSave() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
   }
 }

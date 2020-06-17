@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sarshelp/screens/auth/signup_page.dart';
+import 'package:sarshelp/screens/home_page.dart';
 import 'package:sarshelp/services/authentication.dart';
 
 
@@ -192,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () => {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SingUpPage()),
+          MaterialPageRoute(builder: (context) => SingUpPage(auth: new Auth())),
         )
       }
           // _changeFormToSignUp
