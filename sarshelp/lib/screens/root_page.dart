@@ -4,6 +4,8 @@ import 'package:sarshelp/screens/home_page.dart';
 import 'package:sarshelp/services/authentication.dart';
 import 'package:sarshelp/widgets/common.dart';
 
+import 'auth/login_page.dart';
+
 class RootPage extends StatefulWidget {
   
   RootPage({this.auth});
@@ -67,9 +69,8 @@ class _RootPageState extends State<RootPage> {
         return _buildWaitingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
-        return new LoginSignUpPage(
+        return new LoginPage(
           auth: widget.auth,
-          onSignedIn: _onLoggedIn,
         );
         break;
       case AuthStatus.LOGGED_IN:
