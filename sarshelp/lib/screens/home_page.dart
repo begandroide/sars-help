@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print(e);
     }
+    Navigator.pushReplacementNamed(context, '/Auth');
  }
 
 
