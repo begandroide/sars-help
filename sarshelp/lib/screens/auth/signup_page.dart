@@ -60,8 +60,9 @@ class _SignUpPageState extends State<SingUpPage> {
           title: Text('Crear cuenta'),
         ),
         body: Column(children: <Widget>[
-          Expanded(
-            child: Stepper(
+          new SizedBox(
+          height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height/5,
+          child: Stepper(
               steps: steps,
               currentStep: currentStep,
               onStepContinue: next,
@@ -168,64 +169,63 @@ Widget _getDatePickerEnabled() {
 
   List<Step> getSteps() {
     return [
-    Step(
-      title: const Text('Nueva Cuenta'),
-      isActive: true,
-      state: StepState.indexed,
-      content: Column(
-        children: <Widget>[
-          _showEmailInput(),
-          _showPasswordInput()
-        ],
+      Step(
+        title: const Text('Nueva Cuenta'),
+        isActive: true,
+        state: StepState.indexed,
+        content: Column(
+          children: <Widget>[
+            _showEmailInput(),
+            _showPasswordInput()
+          ],
+        ),
       ),
-    ),
-    Step(
-      isActive: false,
-      state: StepState.indexed,
-      title: const Text('Datos Personales'),
-      content: Column(
-        children: <Widget>[
-          TextFormField(
-            maxLines: 1,
-            keyboardType: TextInputType.text,
-            autofocus: false,
-            decoration: new InputDecoration(
-                hintText: 'Nombres',
-                ),
-            validator: (value) => value.isEmpty ? 'El nombre es requerido' : null,
-            onSaved: (value) => userFormInputs.names= value,
-          ),
-          TextFormField(
-            maxLines: 1,
-            keyboardType: TextInputType.text,
-            autofocus: false,
-            decoration: new InputDecoration(
-                hintText: 'Apellidos',
-                ),
-            validator: (value) => value.isEmpty ? 'El apellido es requerido' : null,
-            onSaved: (value) => userFormInputs.surnames = value,
-          ),
-          _getDatePickerEnabled()
-        ],
+      Step(
+        isActive: false,
+        state: StepState.indexed,
+        title: const Text('Datos Personales'),
+        content: Column(
+          children: <Widget>[
+            TextFormField(
+              maxLines: 1,
+              keyboardType: TextInputType.text,
+              autofocus: false,
+              decoration: new InputDecoration(
+                  hintText: 'Nombres',
+                  ),
+              validator: (value) => value.isEmpty ? 'El nombre es requerido' : null,
+              onSaved: (value) => userFormInputs.names= value,
+            ),
+            TextFormField(
+              maxLines: 1,
+              keyboardType: TextInputType.text,
+              autofocus: false,
+              decoration: new InputDecoration(
+                  hintText: 'Apellidos',
+                  ),
+              validator: (value) => value.isEmpty ? 'El apellido es requerido' : null,
+              onSaved: (value) => userFormInputs.surnames = value,
+            ),
+            _getDatePickerEnabled()
+          ],
+        ),
       ),
-    ),
-    Step(
-      state: StepState.indexed,
-      title: const Text('Dirección'),
-      subtitle: const Text("Error!"),
-      content: Column(
-        children: <Widget>[
-          // ,SearchMapPlaceWidget(
-          //   apiKey: 'AIzaSyBuLY0izEUkQgdYz02as6hUWBr1H2TjClY'
-          // )
-        ],
+      Step(
+        state: StepState.indexed,
+        title: const Text('Dirección'),
+        subtitle: const Text("Error!"),
+        content: Column(
+          children: <Widget>[
+            // ,SearchMapPlaceWidget(
+            // )
+          ],
+        ),
       ),
-    ),
-  ];
+    ];
   }
     Widget _showPrimaryButton() {
     return new SizedBox(
-          // height: 40.0,
+          // height: MediaQuery.of(context).size.height/6,
           child: new RaisedButton(
             elevation: 5.0,
             shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
