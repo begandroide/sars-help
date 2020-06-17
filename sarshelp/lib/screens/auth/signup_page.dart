@@ -35,20 +35,21 @@ class _SignUpPageState extends State<SingUpPage> {
 
   bool _isLoading;
   List<Step> steps = [];
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate;
 
   Future<Null> _selectDate() async {
     final DateTime picked = await showDatePicker(
+        locale: Locale('es', 'CL'),
         context: context,
-        initialDate: selectedDate,
+        initialDate: DateTime.now(),
         firstDate: DateTime(1940, 1),
         lastDate: DateTime(2030),
-        cancelText: "CANCELAR",
-        
+        helpText: "Ingresa tu fecha de nacimiento"
       );
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
+        userFormInputs.birthdate = selectedDate;
       });
   }
   @override
@@ -81,7 +82,8 @@ class _SignUpPageState extends State<SingUpPage> {
                 );
               }
             ),
-          )
+          ),
+          _showPrimaryButton()
         ]));
   }
 
@@ -100,7 +102,30 @@ class _SignUpPageState extends State<SingUpPage> {
   goTo(int step) {
     setState(() => currentStep = step);
   }
-
+Widget _getDatePickerEnabled() {
+    return InkWell(
+      onTap: () {
+        _selectDate();
+      },
+      child: InputDecorator(
+        decoration: InputDecoration(labelText: 'Fecha nacimiento'),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Text(
+              selectedDate == null ? '' :
+              "${selectedDate.toLocal()}".split(' ')[0],
+            ),
+            Icon(Icons.arrow_drop_down,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.grey.shade700
+                    : Colors.white70),
+          ],
+        ),
+      ),
+    );
+  }
   
   Widget _showPasswordInput() {
     return Padding(
@@ -161,18 +186,26 @@ class _SignUpPageState extends State<SingUpPage> {
       content: Column(
         children: <Widget>[
           TextFormField(
-            decoration: InputDecoration(labelText: 'Nombres'),
+            maxLines: 1,
+            keyboardType: TextInputType.text,
+            autofocus: false,
+            decoration: new InputDecoration(
+                hintText: 'Nombres',
+                ),
+            validator: (value) => value.isEmpty ? 'El nombre es requerido' : null,
+            onSaved: (value) => userFormInputs.names= value,
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: 'Apellidos'),
+            maxLines: 1,
+            keyboardType: TextInputType.text,
+            autofocus: false,
+            decoration: new InputDecoration(
+                hintText: 'Apellidos',
+                ),
+            validator: (value) => value.isEmpty ? 'El apellido es requerido' : null,
+            onSaved: (value) => userFormInputs.surnames = value,
           ),
-          TextFormField(
-            onTap: () => {
-              _selectDate()
-            },
-            initialValue: "${selectedDate.toLocal()}".split(' ')[0],
-            decoration: InputDecoration(labelText: 'Fecha nacimiento'),
-          ),
+          _getDatePickerEnabled()
         ],
       ),
     ),
@@ -182,12 +215,28 @@ class _SignUpPageState extends State<SingUpPage> {
       subtitle: const Text("Error!"),
       content: Column(
         children: <Widget>[
-          CircleAvatar(
-            backgroundColor: Colors.red,
-          )
+          // ,SearchMapPlaceWidget(
+          //   apiKey: 'AIzaSyBuLY0izEUkQgdYz02as6hUWBr1H2TjClY'
+          // )
         ],
       ),
     ),
   ];
+  }
+    Widget _showPrimaryButton() {
+    return new SizedBox(
+          // height: 40.0,
+          child: new RaisedButton(
+            elevation: 5.0,
+            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+            color: Colors.blue,
+            child: new Text('Registrarse',
+                    style: new TextStyle(fontSize: 20.0, color: Colors.white) ),
+            onPressed: _validateAndSubmit,
+          ),
+        );
+  }
+  _validateAndSubmit(){
+
   }
 }

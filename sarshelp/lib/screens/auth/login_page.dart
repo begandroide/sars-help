@@ -48,7 +48,8 @@ class _LoginPageState extends State<LoginPage> {
         });
 
         if (userId.length > 0 && userId != null) {
-          // mostrar pantalla de registro de datos de usuario y luego mostrar onSignedId          
+          // mostrar pantalla de registro de datos de usuario y luego mostrar onSignedId     
+          Navigator.pushReplacementNamed(context, '/Home' );     
         }
 
       } catch (e) {
@@ -78,6 +79,7 @@ class _LoginPageState extends State<LoginPage> {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return new Scaffold(
         appBar: new AppBar(
+          automaticallyImplyLeading: false, // Used for removing back buttoon. 
           title: new Center(child:Text('Sars Help')),
         ),
         body: Stack(
