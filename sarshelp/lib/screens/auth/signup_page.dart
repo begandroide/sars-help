@@ -62,7 +62,9 @@ class _SignUpPageState extends State<SingUpPage> {
         appBar: AppBar(
           title: Text('Crear cuenta'),
         ),
-        body:new Form(
+        body: SingleChildScrollView(
+          child:
+        new Form(
           key: _formKey,
           child:
          Column(children: <Widget>[
@@ -91,7 +93,7 @@ class _SignUpPageState extends State<SingUpPage> {
             ),
           ),
           _showPrimaryButton()
-        ])));
+        ]))));
   }
 
   next() {
@@ -213,15 +215,6 @@ Widget _getDatePickerEnabled() {
               onSaved: (value) => userFormInputs.surnames = value,
             ),
             _getDatePickerEnabled(),
-          ],
-        ),
-      ),
-      Step(
-        state: StepState.indexed,
-        title: const Text('Dirección'),
-        subtitle: const Text("Error!"),
-        content: Column(
-          children: <Widget>[
           ],
         ),
       ),
