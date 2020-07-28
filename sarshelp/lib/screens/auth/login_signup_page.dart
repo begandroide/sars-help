@@ -56,6 +56,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage> {
         });
 
         if (userId.length > 0 && userId != null) {
+          // mostrar pantalla de registro de datos de usuario y luego mostrar onSignedId          
           widget.onSignedIn();
         }
 

@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print(e);
     }
+    Navigator.pushReplacementNamed(context, '/Auth');
  }
 
 
@@ -73,6 +74,7 @@ onTabTapped(int index) {
     return new Scaffold(
       appBar: new AppBar(
         title: new Center(child:Text('Sars Help')),
+        automaticallyImplyLeading: false,
         actions: [
           PopupMenuButton<String>(
   				onSelected: this._select,
