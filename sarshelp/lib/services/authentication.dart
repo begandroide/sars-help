@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
@@ -9,6 +10,8 @@ abstract class BaseAuth {
   Future<FirebaseUser> getCurrentUser();
 
   Future<void> signOut();
+
+  Future<void> forgotPassword(String email);
 }
 
 class Auth implements BaseAuth {
@@ -22,7 +25,7 @@ class Auth implements BaseAuth {
 
   Future<String> signUp(String email, String password) async {
     AuthResult user = await _firebaseAuth.createUserWithEmailAndPassword(
-       email: email, password: password);
+        email: email, password: password);
     return user.user.uid;
   }
 
@@ -33,5 +36,15 @@ class Auth implements BaseAuth {
 
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
+  }
+
+  Future<void> forgotPassword(String email) {
+    try {
+      return _firebaseAuth
+          .sendPasswordResetEmail(email: email)
+          .catchError((e) => print(e));
+    } on PlatformException catch (e) {
+      return Future.error(e);
+    }
   }
 }
