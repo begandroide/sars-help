@@ -1,1 +1,6 @@
 sarshelp/android/app/src/main/AndroidManifest.xml
+sarshelp/pubspec.lock
+sarshelpElectron/node_modules
+sarshelpElectron/dll
+sarshelpElectron/app/node_modules
+
