@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sarshelp/screens/auth/signup_page.dart';
-import 'package:sarshelp/screens/home_page.dart';
 import 'package:sarshelp/services/authentication.dart';
-
+import 'package:sarshelp/screens/auth/forgot_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.auth});
@@ -12,7 +11,6 @@ class LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _LoginPageState();
 }
-
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = new GlobalKey<FormState>();
@@ -33,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
     }
     return false;
   }
+
   // Perform login or signup
   _validateAndSubmit() async {
     setState(() {
@@ -49,10 +48,9 @@ class _LoginPageState extends State<LoginPage> {
         });
 
         if (userId.length > 0 && userId != null) {
-          // mostrar pantalla de registro de datos de usuario y luego mostrar onSignedId     
-          Navigator.pushReplacementNamed(context, '/Home' );     
+          // mostrar pantalla de registro de datos de usuario y luego mostrar onSignedId
+          Navigator.pushReplacementNamed(context, '/Home');
         }
-
       } catch (e) {
         print('Error: $e');
         setState(() {
@@ -66,7 +64,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-
   @override
   void initState() {
     _errorMessage = "";
@@ -74,14 +71,13 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return new Scaffold(
         appBar: new AppBar(
-          automaticallyImplyLeading: false, // Used for removing back buttoon. 
-          title: new Center(child:Text('Sars Help')),
+          automaticallyImplyLeading: false, // Used for removing back buttoon.
+          title: new Center(child: Text('Sars Help')),
         ),
         body: Stack(
           children: <Widget>[
@@ -91,14 +87,17 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Widget _showCircularProgress(){
+  Widget _showCircularProgress() {
     if (_isLoading) {
       return Center(child: CircularProgressIndicator());
-    } return Container(height: 0.0, width: 0.0,);
-
+    }
+    return Container(
+      height: 0.0,
+      width: 0.0,
+    );
   }
 
-  Widget _showBody(){
+  Widget _showBody() {
     return new Container(
         padding: EdgeInsets.all(16.0),
         child: new Form(
@@ -111,6 +110,7 @@ class _LoginPageState extends State<LoginPage> {
               _showPasswordInput(),
               _showPrimaryButton(),
               _showSecondaryButton(),
+              _showForgotButton(),
               _showErrorMessage(),
             ],
           ),
@@ -161,7 +161,8 @@ class _LoginPageState extends State<LoginPage> {
               Icons.mail,
               color: Colors.grey,
             )),
-        validator: (value) => value.isEmpty ? 'Correo no puede ser vacío' : null,
+        validator: (value) =>
+            value.isEmpty ? 'Correo no puede ser vacío' : null,
         onSaved: (value) => _email = value,
       ),
     );
@@ -180,24 +181,41 @@ class _LoginPageState extends State<LoginPage> {
               Icons.lock,
               color: Colors.grey,
             )),
-        validator: (value) => value.isEmpty ? 'Debe ingresar una contraseña' : null,
+        validator: (value) =>
+            value.isEmpty ? 'Debe ingresar una contraseña' : null,
         onSaved: (value) => _password = value,
       ),
     );
   }
 
+  Widget _showForgotButton() {
+    return new FlatButton(
+        child: new Text('¿Olvidaste tu contraseña?',
+            style: new TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300)),
+        onPressed: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ForgotPage(auth: new Auth())),
+              )
+            }
+        // _changeFormToSignUp
+        );
+  }
+
   Widget _showSecondaryButton() {
     return new FlatButton(
-      child: new Text('Crear una cuenta',
-              style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
-      onPressed: () => {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SingUpPage(auth: new Auth())),
-        )
-      }
-          // _changeFormToSignUp
-    );
+        child: new Text('Crear una cuenta',
+            style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
+        onPressed: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SingUpPage(auth: new Auth())),
+              )
+            }
+        // _changeFormToSignUp
+        );
   }
 
   Widget _showPrimaryButton() {
@@ -207,13 +225,13 @@ class _LoginPageState extends State<LoginPage> {
           height: 40.0,
           child: new RaisedButton(
             elevation: 5.0,
-            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(30.0)),
             color: Colors.blue,
             child: new Text('Iniciar Sesión',
-                    style: new TextStyle(fontSize: 20.0, color: Colors.white) ),
+                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: _validateAndSubmit,
           ),
         ));
   }
-  
 }
