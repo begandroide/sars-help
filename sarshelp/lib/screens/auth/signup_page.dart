@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sarshelp/services/authentication.dart';
-import 'package:search_map_place/search_map_place.dart';
 
 class SingUpPage extends StatefulWidget {
   SingUpPage({Key key, this.auth}) : super(key: key);
@@ -12,6 +10,7 @@ class SingUpPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _SignUpPageState();
 }
+
 class FormSignup {
   String email;
   String password;
@@ -19,7 +18,7 @@ class FormSignup {
   String surnames;
   DateTime birthdate;
   GeoPoint address;
-  
+
   Form() {
     this.email = '';
     this.password = '';
@@ -29,8 +28,8 @@ class FormSignup {
 
 class _SignUpPageState extends State<SingUpPage> {
   final _formKey = new GlobalKey<FormState>();
-  FormSignup userFormInputs = new FormSignup(); 
-  
+  FormSignup userFormInputs = new FormSignup();
+
   String _errorMessage;
   int currentStep = 0;
   bool complete = false;
@@ -46,14 +45,14 @@ class _SignUpPageState extends State<SingUpPage> {
         initialDate: DateTime.now(),
         firstDate: DateTime(1940, 1),
         lastDate: DateTime(2030),
-        helpText: "Ingresa tu fecha de nacimiento"
-      );
+        helpText: "Ingresa tu fecha de nacimiento");
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
         userFormInputs.birthdate = selectedDate;
       });
   }
+
   @override
   Widget build(BuildContext context) {
     steps = getSteps();
@@ -63,37 +62,37 @@ class _SignUpPageState extends State<SingUpPage> {
           title: Text('Crear cuenta'),
         ),
         body: SingleChildScrollView(
-          child:
-        new Form(
-          key: _formKey,
-          child:
-         Column(children: <Widget>[
-          new SizedBox(
-          height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height/5,
-          child: Stepper(
-              steps: steps,
-              currentStep: currentStep,
-              onStepContinue: next,
-              onStepTapped: (step) => goTo(step),
-              onStepCancel: cancel,
-              controlsBuilder: ( BuildContext context, {VoidCallback onStepContinue, VoidCallback onStepCancel} ) {
-                return Row(
-                  children: <Widget>[
-                    FlatButton(
-                      onPressed: onStepContinue,
-                      child: const Text('Continuar'),
-                    ),
-                    FlatButton(
-                      onPressed: onStepCancel,
-                      child: const Text('Cancelar'),
-                    ),
-                  ],
-                );
-              }
-            ),
-          ),
-          _showPrimaryButton()
-        ]))));
+            child: new Form(
+                key: _formKey,
+                child: Column(children: <Widget>[
+                  new SizedBox(
+                    height: MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).size.height / 5,
+                    child: Stepper(
+                        steps: steps,
+                        currentStep: currentStep,
+                        onStepContinue: next,
+                        onStepTapped: (step) => goTo(step),
+                        onStepCancel: cancel,
+                        controlsBuilder: (BuildContext context,
+                            {VoidCallback onStepContinue,
+                            VoidCallback onStepCancel}) {
+                          return Row(
+                            children: <Widget>[
+                              FlatButton(
+                                onPressed: onStepContinue,
+                                child: const Text('Continuar'),
+                              ),
+                              FlatButton(
+                                onPressed: onStepCancel,
+                                child: const Text('Cancelar'),
+                              ),
+                            ],
+                          );
+                        }),
+                  ),
+                  _showPrimaryButton()
+                ]))));
   }
 
   next() {
@@ -111,7 +110,8 @@ class _SignUpPageState extends State<SingUpPage> {
   goTo(int step) {
     setState(() => currentStep = step);
   }
-Widget _getDatePickerEnabled() {
+
+  Widget _getDatePickerEnabled() {
     return InkWell(
       onTap: () {
         _selectDate();
@@ -123,8 +123,9 @@ Widget _getDatePickerEnabled() {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Text(
-              selectedDate == null ? '' :
-              "${selectedDate.toLocal()}".split(' ')[0],
+              selectedDate == null
+                  ? ''
+                  : "${selectedDate.toLocal()}".split(' ')[0],
             ),
             Icon(Icons.arrow_drop_down,
                 color: Theme.of(context).brightness == Brightness.light
@@ -135,7 +136,7 @@ Widget _getDatePickerEnabled() {
       ),
     );
   }
-  
+
   Widget _showPasswordInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
@@ -149,12 +150,13 @@ Widget _getDatePickerEnabled() {
               Icons.lock,
               color: Colors.grey,
             )),
-        validator: (value) => value.isEmpty ? 'Debe ingresar una contraseña' : null,
+        validator: (value) =>
+            value.isEmpty ? 'Debe ingresar una contraseña' : null,
         onSaved: (value) => userFormInputs.password = value,
       ),
     );
   }
-  
+
   Widget _showEmailInput() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
@@ -168,12 +170,12 @@ Widget _getDatePickerEnabled() {
               Icons.mail,
               color: Colors.grey,
             )),
-        validator: (value) => value.isEmpty ? 'Correo no puede ser vacío' : null,
+        validator: (value) =>
+            value.isEmpty ? 'Correo no puede ser vacío' : null,
         onSaved: (value) => userFormInputs.email = value,
       ),
     );
   }
-
 
   List<Step> getSteps() {
     return [
@@ -182,10 +184,7 @@ Widget _getDatePickerEnabled() {
         isActive: true,
         state: StepState.indexed,
         content: Column(
-          children: <Widget>[
-            _showEmailInput(),
-            _showPasswordInput()
-          ],
+          children: <Widget>[_showEmailInput(), _showPasswordInput()],
         ),
       ),
       Step(
@@ -199,19 +198,21 @@ Widget _getDatePickerEnabled() {
               keyboardType: TextInputType.text,
               autofocus: false,
               decoration: new InputDecoration(
-                  hintText: 'Nombres',
-                  ),
-              validator: (value) => value.isEmpty ? 'El nombre es requerido' : null,
-              onSaved: (value) => userFormInputs.names= value,
+                hintText: 'Nombres',
+              ),
+              validator: (value) =>
+                  value.isEmpty ? 'El nombre es requerido' : null,
+              onSaved: (value) => userFormInputs.names = value,
             ),
             TextFormField(
               maxLines: 1,
               keyboardType: TextInputType.text,
               autofocus: false,
               decoration: new InputDecoration(
-                  hintText: 'Apellidos',
-                  ),
-              validator: (value) => value.isEmpty ? 'El apellido es requerido' : null,
+                hintText: 'Apellidos',
+              ),
+              validator: (value) =>
+                  value.isEmpty ? 'El apellido es requerido' : null,
               onSaved: (value) => userFormInputs.surnames = value,
             ),
             _getDatePickerEnabled(),
@@ -220,21 +221,22 @@ Widget _getDatePickerEnabled() {
       ),
     ];
   }
-    Widget _showPrimaryButton() {
+
+  Widget _showPrimaryButton() {
     return new SizedBox(
-          // height: MediaQuery.of(context).size.height/6,
-          child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.blue,
-            child: new Text('Registrarse',
-                    style: new TextStyle(fontSize: 20.0, color: Colors.white) ),
-            onPressed: _validateAndSubmit,
-          ),
-        );
+      // height: MediaQuery.of(context).size.height/6,
+      child: new RaisedButton(
+        elevation: 5.0,
+        shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0)),
+        color: Colors.blue,
+        child: new Text('Registrarse',
+            style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+        onPressed: _validateAndSubmit,
+      ),
+    );
   }
 
-  
   // Perform login or signup
   _validateAndSubmit() async {
     setState(() {
@@ -244,12 +246,13 @@ Widget _getDatePickerEnabled() {
     if (_validateAndSave()) {
       String userId = "";
       try {
-        userId = await widget.auth.signUp(userFormInputs.email, userFormInputs.password);
+        userId = await widget.auth
+            .signUp(userFormInputs.email, userFormInputs.password);
         print('Signed up user: $userId');
         Firestore.instance.collection('Users').document(userId).setData({
           'birthdate': userFormInputs.birthdate,
           'name': userFormInputs.names,
-          'lastName': userFormInputs.surnames, 
+          'lastName': userFormInputs.surnames,
           'address': GeoPoint(-33.04, -71.59)
         });
         setState(() {
@@ -257,11 +260,10 @@ Widget _getDatePickerEnabled() {
         });
 
         if (userId.length > 0 && userId != null) {
-          // mostrar pantalla de registro de datos de usuario y luego mostrar onSignedId          
+          // mostrar pantalla de registro de datos de usuario y luego mostrar onSignedId
           // widget.onSignedIn();
-          Navigator.pushNamedAndRemoveUntil(context, '/Home', (_)=>false);
+          Navigator.pushNamedAndRemoveUntil(context, '/Home', (_) => false);
         }
-
       } catch (e) {
         print('Error: $e');
         setState(() {
@@ -274,6 +276,7 @@ Widget _getDatePickerEnabled() {
       }
     }
   }
+
   // Check if form is valid before perform login or signup
   bool _validateAndSave() {
     final form = _formKey.currentState;

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sarshelp/screens/auth/login_signup_page.dart';
 import 'package:sarshelp/screens/home_page.dart';
 import 'package:sarshelp/services/authentication.dart';
 import 'package:sarshelp/widgets/common.dart';
@@ -7,7 +6,6 @@ import 'package:sarshelp/widgets/common.dart';
 import 'auth/login_page.dart';
 
 class RootPage extends StatefulWidget {
-  
   RootPage({this.auth});
 
   final BaseAuth auth;
@@ -35,14 +33,13 @@ class _RootPageState extends State<RootPage> {
   }
 
   void _onLoggedIn() {
-    widget.auth.getCurrentUser().then((user){
+    widget.auth.getCurrentUser().then((user) {
       setState(() {
         _userId = user.uid.toString();
       });
     });
     setState(() {
       authStatus = AuthStatus.LOGGED_IN;
-
     });
   }
 
@@ -76,7 +73,8 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
           return new HomePage();
-        } else return _buildWaitingScreen();
+        } else
+          return _buildWaitingScreen();
         break;
       default:
         return _buildWaitingScreen();

@@ -1,24 +1,23 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sarshelp/screens/auth/signup_page.dart';
 import 'package:sarshelp/services/authentication.dart';
-import 'package:sarshelp/screens/auth/forgot_page.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({this.auth});
+class ForgotPage extends StatefulWidget {
+  ForgotPage({this.auth});
 
   final BaseAuth auth;
 
   @override
-  State<StatefulWidget> createState() => new _LoginPageState();
+  State<StatefulWidget> createState() => new _ForgotPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ForgotPageState extends State<ForgotPage> {
   final _formKey = new GlobalKey<FormState>();
 
   String _email;
-  String _password;
   String _errorMessage;
-
+  bool _hasErrors;
   bool _isIos;
   bool _isLoading;
 
@@ -35,22 +34,36 @@ class _LoginPageState extends State<LoginPage> {
   // Perform login or signup
   _validateAndSubmit() async {
     setState(() {
+      _hasErrors = false;
       _errorMessage = "";
       _isLoading = true;
     });
     if (_validateAndSave()) {
-      String userId = "";
       try {
-        userId = await widget.auth.signIn(_email, _password);
-        print('Signed in: $userId');
-        setState(() {
-          _isLoading = false;
-        });
-
-        if (userId.length > 0 && userId != null) {
-          // mostrar pantalla de registro de datos de usuario y luego mostrar onSignedId
-          Navigator.pushReplacementNamed(context, '/Home');
-        }
+        widget.auth
+            .forgotPassword(_email)
+            .catchError((er) => {
+                  print(er),
+                  setState(() {
+                    _isLoading = false;
+                    _hasErrors = true;
+                    if (_isIos) {
+                      _errorMessage = er.details;
+                    } else
+                      _errorMessage = "Hemos tenido un problema con tu correo";
+                  })
+                })
+            .whenComplete(() => {
+                  setState(() {
+                    _isLoading = false;
+                  }),
+                  if (!_hasErrors)
+                    {
+                      print("Email enviado o denegado"),
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/', (_) => false)
+                    }
+                });
       } catch (e) {
         print('Error: $e');
         setState(() {
@@ -76,8 +89,7 @@ class _LoginPageState extends State<LoginPage> {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return new Scaffold(
         appBar: new AppBar(
-          automaticallyImplyLeading: false, // Used for removing back buttoon.
-          title: new Center(child: Text('Sars Help')),
+          title: Text('Sars Help'),
         ),
         body: Stack(
           children: <Widget>[
@@ -107,10 +119,7 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               _showLogo(),
               _showEmailInput(),
-              _showPasswordInput(),
               _showPrimaryButton(),
-              _showSecondaryButton(),
-              _showForgotButton(),
               _showErrorMessage(),
             ],
           ),
@@ -119,14 +128,16 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      return new Text(
-        _errorMessage,
-        style: TextStyle(
-            fontSize: 13.0,
-            color: Colors.red,
-            height: 1.0,
-            fontWeight: FontWeight.w300),
-      );
+      return new Container(
+          padding: EdgeInsets.all(10.0),
+          child: Text(
+            _errorMessage,
+            style: TextStyle(
+                fontSize: 13.0,
+                color: Colors.red,
+                height: 1.0,
+                fontWeight: FontWeight.w300),
+          ));
     } else {
       return new Container(
         height: 0.0,
@@ -168,56 +179,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _showPasswordInput() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
-      child: new TextFormField(
-        maxLines: 1,
-        obscureText: true,
-        autofocus: false,
-        decoration: new InputDecoration(
-            hintText: 'Contraseña',
-            icon: new Icon(
-              Icons.lock,
-              color: Colors.grey,
-            )),
-        validator: (value) =>
-            value.isEmpty ? 'Debe ingresar una contraseña' : null,
-        onSaved: (value) => _password = value,
-      ),
-    );
-  }
-
-  Widget _showForgotButton() {
-    return new FlatButton(
-        child: new Text('¿Olvidaste tu contraseña?',
-            style: new TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300)),
-        onPressed: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ForgotPage(auth: new Auth())),
-              )
-            }
-        // _changeFormToSignUp
-        );
-  }
-
-  Widget _showSecondaryButton() {
-    return new FlatButton(
-        child: new Text('Crear una cuenta',
-            style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
-        onPressed: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SingUpPage(auth: new Auth())),
-              )
-            }
-        // _changeFormToSignUp
-        );
-  }
-
   Widget _showPrimaryButton() {
     return new Padding(
         padding: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
@@ -228,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0)),
             color: Colors.blue,
-            child: new Text('Iniciar Sesión',
+            child: new Text('Recuperar contraseña',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: _validateAndSubmit,
           ),
