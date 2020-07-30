@@ -16,13 +16,17 @@ class FormSignup {
   String password;
   String names;
   String surnames;
+  String rut;
+  String dni;
   DateTime birthdate;
   GeoPoint address;
 
-  Form() {
+  FormSignup() {
     this.email = '';
     this.password = '';
     this.names = '';
+    this.rut = '';
+    this.dni = '';
   }
 }
 
@@ -215,6 +219,28 @@ class _SignUpPageState extends State<SingUpPage> {
                   value.isEmpty ? 'El apellido es requerido' : null,
               onSaved: (value) => userFormInputs.surnames = value,
             ),
+            TextFormField(
+              maxLines: 1,
+              keyboardType: TextInputType.text,
+              autofocus: false,
+              decoration: new InputDecoration(
+                hintText: 'Rut',
+              ),
+              validator: (value) =>
+                  value.isEmpty ? 'El rut es requerido' : null,
+              onSaved: (value) => userFormInputs.rut = value,
+            ),
+            TextFormField(
+              maxLines: 1,
+              keyboardType: TextInputType.text,
+              autofocus: false,
+              decoration: new InputDecoration(
+                hintText: 'Número de documento',
+              ),
+              validator: (value) =>
+                  value.isEmpty ? 'El número de documento es requerido' : null,
+              onSaved: (value) => userFormInputs.dni = value,
+            ),
             _getDatePickerEnabled(),
           ],
         ),
@@ -253,7 +279,9 @@ class _SignUpPageState extends State<SingUpPage> {
           'birthdate': userFormInputs.birthdate,
           'name': userFormInputs.names,
           'lastName': userFormInputs.surnames,
-          'address': GeoPoint(-33.04, -71.59)
+          'address': GeoPoint(-33.04, -71.59),
+          'rut': userFormInputs.rut,
+          'dni': userFormInputs.dni
         });
         setState(() {
           _isLoading = false;
