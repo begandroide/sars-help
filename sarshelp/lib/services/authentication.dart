@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
@@ -38,13 +37,7 @@ class Auth implements BaseAuth {
     return _firebaseAuth.signOut();
   }
 
-  Future<void> forgotPassword(String email) {
-    try {
-      return _firebaseAuth
-          .sendPasswordResetEmail(email: email)
-          .catchError((e) => print(e));
-    } on PlatformException catch (e) {
-      return Future.error(e);
-    }
+  Future<void> forgotPassword(String email) async {
+    return await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 }

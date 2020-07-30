@@ -17,7 +17,7 @@ class _ForgotPageState extends State<ForgotPage> {
 
   String _email;
   String _errorMessage;
-
+  bool _hasErrors;
   bool _isIos;
   bool _isLoading;
 
@@ -34,6 +34,7 @@ class _ForgotPageState extends State<ForgotPage> {
   // Perform login or signup
   _validateAndSubmit() async {
     setState(() {
+      _hasErrors = false;
       _errorMessage = "";
       _isLoading = true;
     });
@@ -41,12 +42,27 @@ class _ForgotPageState extends State<ForgotPage> {
       try {
         widget.auth
             .forgotPassword(_email)
-            .catchError((er) => {print(er)})
-            .whenComplete(() => {
-                  print("Email enviado"),
+            .catchError((er) => {
+                  print(er),
                   setState(() {
                     _isLoading = false;
+                    _hasErrors = true;
+                    if (_isIos) {
+                      _errorMessage = er.details;
+                    } else
+                      _errorMessage = "Hemos tenido un problema con tu correo";
                   })
+                })
+            .whenComplete(() => {
+                  setState(() {
+                    _isLoading = false;
+                  }),
+                  if (!_hasErrors)
+                    {
+                      print("Email enviado o denegado"),
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/', (_) => false)
+                    }
                 });
       } catch (e) {
         print('Error: $e');
@@ -73,8 +89,7 @@ class _ForgotPageState extends State<ForgotPage> {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return new Scaffold(
         appBar: new AppBar(
-          automaticallyImplyLeading: false, // Used for removing back buttoon.
-          title: new Center(child: Text('Sars Help')),
+          title: Text('Sars Help'),
         ),
         body: Stack(
           children: <Widget>[
@@ -113,14 +128,16 @@ class _ForgotPageState extends State<ForgotPage> {
 
   Widget _showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      return new Text(
-        _errorMessage,
-        style: TextStyle(
-            fontSize: 13.0,
-            color: Colors.red,
-            height: 1.0,
-            fontWeight: FontWeight.w300),
-      );
+      return new Container(
+          padding: EdgeInsets.all(10.0),
+          child: Text(
+            _errorMessage,
+            style: TextStyle(
+                fontSize: 13.0,
+                color: Colors.red,
+                height: 1.0,
+                fontWeight: FontWeight.w300),
+          ));
     } else {
       return new Container(
         height: 0.0,
