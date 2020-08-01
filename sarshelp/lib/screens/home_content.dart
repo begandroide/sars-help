@@ -46,37 +46,32 @@ class _HomeContentState extends State<HomeContent> {
     );
   }
 
-  void onVoluntierTapped() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => VoluntierEnrollmentPage()),
-    );
-  }
-
   Widget _getVoluntiersCard() {
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const ListTile(
-              leading: Icon(Icons.people),
-              contentPadding:
-                  EdgeInsets.only(left: 15.0, right: 40.0, top: 10.0),
-              title: Text(
-                'Voluntarios',
-              ),
-              subtitle: Text(
-                  'Los voluntarios asisten a los que necesitan de ayuda ¡Únete al programa!'),
-              isThreeLine: true,
-              onTap: () {
-                onVoluntierTapped()
-              } 
-              ),
+          ListTile(
+            leading: Icon(Icons.people),
+            contentPadding: EdgeInsets.only(left: 15.0, right: 40.0, top: 10.0),
+            title: Text(
+              'Voluntarios',
+            ),
+            subtitle: Text(
+                'Los voluntarios asisten a los que necesitan de ayuda ¡Únete al programa!'),
+            isThreeLine: true,
+          ),
           ButtonBar(
             children: <Widget>[
               FlatButton(
                 child: const Text('SER VOLUNTARIO'),
-                onPressed: () {/* ... */},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => VoluntierEnrollmentPage()),
+                  );
+                },
               ),
               FlatButton(
                 child: const Text('MÁS INFO'),
