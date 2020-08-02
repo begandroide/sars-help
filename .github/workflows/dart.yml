@@ -3,10 +3,8 @@ name: Dart CI
 on:
   push:
     branches: [ master ]
-    paths: "sarshelp/"
   pull_request:
     branches: [ master ]
-    paths: "sarshelp/
 
 jobs:
   build:
@@ -18,6 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - working-directory: ./sarshelp 
     - name: Install dependencies
       run: pub get
     - name: Run tests
