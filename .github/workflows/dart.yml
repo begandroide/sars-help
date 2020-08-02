@@ -15,9 +15,10 @@ jobs:
       image:  google/dart:latest
 
     steps:
-    - uses: actions/checkout@v2
-    - working-directory: ./sarshelp 
+    - uses: actions/checkout@v2 
     - name: Install dependencies
+      working-directory: ./sarshelp
       run: pub get
     - name: Run tests
+      working-directory: ./sarshelp
       run: pub run test
